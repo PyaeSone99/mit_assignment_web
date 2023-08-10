@@ -1,0 +1,235 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 offset-1 mt-5">
+      <!-- Title And Adding Start -->
+      <div class="d-flex justify-content-between mb-3">
+        <h3 class="fw-bold"><i class="bi bi-building-fill me-2"></i>Orders</h3>
+        <!-- Search Bar -->
+      </div>
+      <!-- Title And Adding End -->
+ <!-- Search Bar -->
+ <div class="float-end" style="width: 300px;">
+  <input type="text" id="search" class="mb-2  w-75" [(ngModel)]="searchTerm" placeholder="Search by ....">
+  <button type="submit" class="btn btn-outline-primary btn-sm mb-2 ms-2" (click)="getAllOrders()">Search</button>
+</div>
+
+<button type="button" class="btn btn-outline-primary btn-sm" (click)="addOrder()">
+  <i class="fa-solid fa-plus me-1"></i>Add Order
+</button>
+      <!-- Table Start -->
+      <table class="table shadow-sm">
+        <thead class="table-info">
+          <tr>
+            <th>Order No</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Amount</th>
+            <th>Total Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of Orders">
+            <td> {{order.orderId}} </td>
+            <td> {{order.customerName}} </td>
+            <td> {{order.customerPhone}} </td>
+            <td> {{order.address}} </td>
+            <td> {{order.orderItems.length}} items</td>
+            <td> ${{order.totalPrice}} </td>
+            <td>
+              <button class="btn btn-sm btn-outline-warning me-3" (click)="goUpdate(order.id)"><i class="fa-regular fa-pen-to-square"></i></button>
+                <button class="btn btn-sm btn-outline-danger me-3" (click)="goDelete(order.id)"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="btn btn-sm btn-outline-info" (click)="goDetail(order.id)"><i class="fa-solid fa-info"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Table End -->
+
+ 
+
+      <!-- Pagination Start -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [ngClass]="{ 'disabled': currentPage === 0 }">
+          <a class="page-link" (click)="goPrevious()">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of totalPages; let i = index" [ngClass]="{ 'active': currentPage === i }">
+          <a class="page-link" (click)="goToPage(i)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [ngClass]="{ 'disabled': currentPage === totalPages.length-1}">
+          <a class="page-link" (click)="goNext()">Next</a>
+        </li>
+      </ul>
+      <!-- Pagination End -->
+
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngFor="let item of selectedItem">
+  <span>You selected: </span><span *ngFor="let item of selectedItem">{{item}}</span>
+  {{item}}
+</div> -->
+
+                <!-- <div class="mb-2 d-flex align-items-end">
+                  <select class="form-select mb-2 h-25 mt-3 w-50" (change)="selectChangeHandler($event)">
+                    <option selected>Choose Items</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Orange">Orange</option>
+                    <option value="Banana">Banana</option>
+                  </select>
+                  <div class="mb-2">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control w-100 ms-2">
+                  </div>
+                </div> -->
+
+     <!-- Model Box Start -->
+     <!-- <div class="modal" id="addProduct">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-2">
+                <label for="customerName" class="form-label">Customer Name</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="mb-2">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" cols="3" rows="3" class="form-control"></textarea>
+              </div> -->
+              <!-- Dynamic Item Form Start -->
+              <!-- <div formArrayName="seatLevels" id="seatAndlevel">
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <div class="d-flex mb-3 justify-content-between">
+                  <div class="me-2" id="selectbox">
+                    <label for="level">Choose Item</label>
+                    <select class="form-select" formControlName="level">
+                      <option value="" selected>Choose Item</option>
+                      <option value="A">Apple</option>
+                      <option value="B">Banana</option>
+                      <option value="c">Orange</option>
+                    </select>
+                  </div>
+          
+                  <div>
+                    <label for="quantity">Quantity</label>
+                    <input class="form-control me-2" type="number" id="quantity" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+          
+                  <button type="button" id="inner" class="btn btn-outline-danger align-self-end ms-3">Delete</button>
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm ">Add
+                  Item</button>
+              </div>
+              
+              Dynamic Item Form End -->
+              <!-- <div class="d-flex float-end mb-2">
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button type="submit" data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>  -->
+    <!-- Model Box End -->

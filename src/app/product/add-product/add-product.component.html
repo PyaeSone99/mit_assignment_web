@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-3 mt-5">
+            <div class="card px-5 py-2 shadow-sm" id="root">
+                
+                <h5>Add Product</h5>
+                <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+                    <div class="mb-2">
+                        <label for="code" class="form-label required">Code</label>
+                        <input type="text" id="code" class="form-control" formControlName="code">
+                        <div
+                            *ngIf="productForm.get('code')?.invalid && (productForm.get('code')?.dirty || productForm.get('code')?.touched)">
+                            <span class="text-danger" *ngIf="productForm.get('code')?.hasError('required')">Code is
+                                required</span>
+                            <span class="text-danger" *ngIf="productForm.get('code')?.hasError('minlength')">Code must
+                                be at least 2 characters</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" formControlName="name">
+                        <div
+                            *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)">
+                            <span class="text-danger" *ngIf="productForm.get('name')?.hasError('required')">Name is
+                                required</span>
+                            <span class="text-danger" *ngIf="productForm.get('name')?.hasError('minlength')">Name must
+                                be at least 5 characters</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label required">Price</label>
+                        <input type="number" class="form-control" formControlName="price">
+                        <div
+                            *ngIf="productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)">
+                            <span class="text-danger" *ngIf="productForm.get('price')?.hasError('required')">Price is
+                                required</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label required">Image</label>
+                        <input type="file" class="form-control" (change)="onFileSelected($event)">
+                        <div
+                            *ngIf="productForm.get('image')?.invalid && (productForm.get('image')?.dirty || productForm.get('image')?.touched)">
+                            <span class="text-danger" *ngIf="productForm.get('image')?.hasError('required')">Image is
+                                required</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label required">Quantity</label>
+                        <input type="number" class="form-control" formControlName="quantity">
+                        <div
+                            *ngIf="productForm.get('quantity')?.invalid && (productForm.get('quantity')?.dirty || productForm.get('quantity')?.touched)">
+                            <span class="text-danger" *ngIf="productForm.get('quantity')?.hasError('required')">Quantity
+                                is required</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label required">Description</label>
+                        <textarea class="form-control" formControlName="description"></textarea>
+                        <div
+                            *ngIf="productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)">
+                            <span class="text-danger"
+                                *ngIf="productForm.get('description')?.hasError('required')">Description is
+                                required</span>
+                            <span class="text-danger"
+                                *ngIf="productForm.get('description')?.hasError('minlength')">Description must be at
+                                least 3 characters</span>
+                        </div>
+                    </div>
+                    <button [disabled]="productForm.invalid" class="btn btn-outline-primary btn-sm ms-3 float-end w-25"
+                        type="submit">Save</button>
+                    <button class="btn btn-outline-danger btn-sm float-end w-25" type="button"
+                        (click)="goBack()">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

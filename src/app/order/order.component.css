@@ -1,0 +1,28 @@
+.container{
+  font-family: 'Bai Jamjuree', sans-serif;
+  min-height: 100vh;
+  width: 100%;
+}
+
+#root{
+  background-color: lavender;
+}
+
+tbody td{
+  padding: 15px 0px 15px 20px;
+}
+
+thead th{
+  padding: 15px 0px 15px 20px;
+}
+
+#search{
+  border: none;
+  background-color: #d8d8da;
+  color: black;
+  outline: none;
+  height: 30px;
+  border-radius: 5px;
+  padding-left: 20px;
+}
+
