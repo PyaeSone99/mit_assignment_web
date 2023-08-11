@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductServicesService } from '../services/product-services.service';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialogComponent } from '../utils/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-product',
@@ -25,7 +26,8 @@ export class ProductComponent implements OnInit{
     this.getAllProduct();
   }
 
-  constructor(private _router:Router,private _services:ProductServicesService){}
+  constructor(private _router:Router,private _services:ProductServicesService,
+              private _dialog:MatDialog){}
 
   getAllProduct(){
     this._services.findAllProduct(this.searchTerm,this.currentPage,this.pageSize).subscribe(
@@ -60,6 +62,13 @@ export class ProductComponent implements OnInit{
       this._services.deleteProduct(id).subscribe(
         result => {
           this._router.navigateByUrl('product')
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Deleting Product',
+            message: 'Product Deleted Successfully.',
+          };
+          dialogConfig.width = '400px';
+          this._dialog.open(AlertDialogComponent,dialogConfig)
           this.getAllProduct();
         }
       )

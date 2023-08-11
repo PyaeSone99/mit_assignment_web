@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductServicesService } from 'src/app/services/product-services.service';
+import { AlertDialogComponent } from 'src/app/utils/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-update-product',
@@ -20,7 +22,7 @@ export class UpdateProductComponent implements OnInit{
   }
 
   constructor(private _router:Router,private _builder:FormBuilder,private _service:ProductServicesService,
-              private _route:ActivatedRoute){
+              private _route:ActivatedRoute,private _dialog:MatDialog){
     this.productForm = _builder.group({
       code : ['',[Validators.required,Validators.minLength(2)]],
       name : ['',[Validators.required,Validators.minLength(5)]],
@@ -62,6 +64,13 @@ export class UpdateProductComponent implements OnInit{
         formData.append('description',this.productForm.get('description')?.value)
         this._service.updateProduct(formData,this.id).subscribe(result => {
           this._router.navigate(["product"])
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Updating Product',
+            message: 'Product Updated Successfully.',
+          };
+          dialogConfig.width = '400px';
+          this._dialog.open(AlertDialogComponent,dialogConfig)
         })
         
       }

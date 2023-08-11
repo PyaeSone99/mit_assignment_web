@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProductServicesService } from 'src/app/services/product-services.service';
+import { AlertDialogComponent } from 'src/app/utils/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-add-product',
@@ -42,6 +43,13 @@ export class AddProductComponent {
         formData.append('description',this.productForm.get('description')?.value)
         this._service.createProduct(formData).subscribe(result => {
           this._router.navigate(["product"])
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Adding Product',
+            message: 'Product Added Successfully',
+          };
+          dialogConfig.width = '400px';
+          this._dialog.open(AlertDialogComponent,dialogConfig)
         })
         
       }

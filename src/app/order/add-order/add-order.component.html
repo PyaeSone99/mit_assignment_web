@@ -4,18 +4,35 @@
       <h5>Add Order</h5>
       <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
-          <button class="btn btn-outline-primary me-2" type="submit"><i class="fa-regular fa-floppy-disk"></i></button>
-          <button class="btn btn-outline-danger" type="button" (click)="goBack()"><i class="fa-solid fa-xmark"></i></button>
+          <button [disabled]="orderForm.invalid" class="btn btn-outline-primary me-2" type="submit"><i
+              class="fa-regular fa-floppy-disk"></i></button>
+          <button class="btn btn-outline-danger" type="button" (click)="goBack()"><i
+              class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="mb-2 d-flex">
           <div class="me-3">
             <label for="customerName" class="form-label">Customer Name</label>
             <input type="text" class="form-control" formControlName="customerName">
-
+            <div
+              *ngIf="orderForm.get('customerName')?.invalid && (orderForm.get('customerName')?.dirty || orderForm.get('customerName')?.touched)">
+              <span class="text-danger" *ngIf="orderForm.get('customerName')?.hasError('required')">Customer Name is
+                required</span>
+              <span class="text-danger" *ngIf="orderForm.get('customerName')?.hasError('minlength')">Customer Name must
+                be at least 5 characters</span>
+            </div>
           </div>
           <div class="">
             <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input type="number" class="form-control" formControlName="customerPhoneNumber">
+            <input type="tel" class="form-control" formControlName="customerPhoneNumber">
+            <div
+              *ngIf="orderForm.get('customerPhoneNumber')?.invalid && (orderForm.get('customerPhoneNumber')?.dirty || orderForm.get('customerPhoneNumber')?.touched)">
+              <span class="text-danger" *ngIf="orderForm.get('customerPhoneNumber')?.hasError('required')">Customer
+                Phone Number is
+                required</span>
+              <span class="text-danger" *ngIf="orderForm.get('customerPhoneNumber')?.hasError('minlength')">Customer
+                Phone Number must
+                be at least 5 characters</span>
+            </div>
           </div>
         </div>
         <div class="mb-2">
@@ -23,7 +40,13 @@
         </div>
         <div class="mb-3">
           <label for="address" class="form-label">Address</label>
-          <textarea name="address" id="address" cols="3" rows="3" class="form-control" formControlName="address"></textarea>
+          <textarea name="address" id="address" cols="3" rows="3" class="form-control"
+            formControlName="address" style="width: 435px;"></textarea>
+          <div
+            *ngIf="orderForm.get('address')?.invalid && (orderForm.get('address')?.dirty || orderForm.get('address')?.touched)">
+            <span class="text-danger" *ngIf="orderForm.get('address')?.hasError('required')">Address is
+              required</span>
+          </div>
         </div>
         <button type="button" class="btn btn-sm btn-outline-danger mb-2" data-bs-toggle="modal"
           data-bs-target="#addProduct"><i class="fa-solid fa-plus me-1"></i>Add Product</button>
@@ -34,24 +57,35 @@
               <th>Name</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Order Quantity</th>
               <th>Total Price</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody *ngFor="let product of selectedProducts;let i =index">
-              <tr >
-                <td> {{product.code}} </td>
-                <td> {{product.name}} </td>
-                <td> {{product.price}} </td>
-                <td formArrayName="orderItems">
-                  <div [formGroupName]="i">
-                    <input class="form-control" id="quantity" type="number" formControlName="quantity">
-                  </div>
-                </td>
-                <td> {{product.price}} </td>
-                <td><button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteSelected(product.id)">Delete</button></td>
-              </tr>
+          <tbody *ngFor="let product of submittedProducts;let i = index">
+            <tr>
+              <td> {{product.code}} </td>
+              <td> {{product.name}} </td>
+              <td> {{product.price}} </td>
+              <td> {{product.quantity}} </td>
+              <td formArrayName="orderItems">
+                <div [formGroupName]="i">
+                  <input [max]="product.quantity" (input)="calculateProductTotal(product, i)" class="form-control"
+                    id="quantity" type="number" formControlName="quantity">
+                </div>
+              </td>
+              <td> {{ calculateTotalPrice(product, orderItems.at(i).get('quantity')?.value) }} </td>
+              <td><button type="button" class="btn btn-sm btn-outline-danger"
+                  (click)="deleteSelected(product)">Delete</button></td>
+            </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5"></td>
+              <td> Overall Total: </td>
+              <td> {{ calculateOverallTotal() }} </td>
+            </tr>
+          </tfoot>
         </table>
       </form>
       <!-- Model Box Start -->
@@ -77,7 +111,8 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let product of products">
-                    <td><input type="checkbox" [checked]="state(product.code)" (click)="change(product,$event)" /></td>
+                    <td><input type="checkbox" [checked]="checkState(product.code)" (click)="check(product,$event)" />
+                    </td>
                     <td> {{product.code}} </td>
                     <td> {{product.name}} </td>
                     <td> {{product.price}} </td>
@@ -93,7 +128,7 @@
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li class="page-item" [ngClass]="{ 'disabled': currentPage === (totalElement/size) -1 }">
+                <li class="page-item" [ngClass]="{ 'disabled': currentPage === totalPages.length-1 }">
                   <a class="page-link" (click)="goNext()">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
@@ -102,7 +137,8 @@
               <!-- Pagination End -->
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" (click)="submitSelectedProduct()" data-bs-dismiss="modal">Submit</button>
+              <button type="submit" class="btn btn-primary" (click)="submitSelectedProduct()"
+                data-bs-dismiss="modal">Submit</button>
               <button type="button" (click)="modelBoxCancel()" data-bs-dismiss="modal"
                 class="btn btn-danger">Cancel</button>
             </div>

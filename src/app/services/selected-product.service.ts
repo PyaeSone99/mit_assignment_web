@@ -4,55 +4,46 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SelectedProductService {
-  selectedProducts:any[] = [];
+  checkedProducts:any[] = [];
 
-  submittedProducts:any[] = []
   constructor(){}
-
-  selectProduct(product:any,isChecked:boolean){
+// This is for product check box Start
+  addCheckedProduct(product:any,isChecked:boolean){
     if(isChecked){
       product.selected = isChecked;
-      this.selectedProducts.push(product);
-
+      this.checkedProducts.push(product);   
     }else{
-      const index = this.selectedProducts.indexOf(product);
-      let test = this.selectedProducts.find(p => p.code == product.code);
-      if(test){
-        test.selected = false
+      let oldCheckedProductData = this.checkedProducts.find(p => p.code == product.code)
+      let index = this.checkedProducts.indexOf(product);
+      if(oldCheckedProductData > -1){
+        oldCheckedProductData.selected = false
+        this.checkedProducts.splice(index,1)
       }
-      if (index !== -1) {
-        product.selected = false;
-        this.selectedProducts.splice(index, 1);
-      }
+      
     }
   }
 
   isChecked(id:number){
-    let test = this.selectedProducts.find(p => p.code == id);
-    if(test){
-      return test.selected
+    let selectedData = this.checkedProducts.find(p => p.code == id);
+    if(selectedData){
+      return selectedData.selected
     }
   }
 
   clearSelectedProducts(){
-    this.selectedProducts.splice(0,this.selectedProducts.length);
+    this.checkedProducts.length = 0
   }
 
-  submit(product:any){
-    if(!this.submittedProducts.every(p => this.selectedProducts.includes(p))){
-      console.log("here");
-      let filterProduct:any
-      for (let selp of product){
-        filterProduct = this.selectedProducts.filter(p => p.id == selp.id)
-      }
-      this.submittedProducts.push(...filterProduct)
-    }else{
-      this.submittedProducts.push(...product);
+  deleteCheckedProduct(product:any){
+    let oldCheckedProductData = this.checkedProducts.find(p => p.code == product.code)
+    let deleteProductIndex = this.checkedProducts.indexOf(product);
+    if(deleteProductIndex > -1){
+      oldCheckedProductData.selected = false
+      this.checkedProducts.splice(deleteProductIndex,1)
     }
-    
   }
+  
+  
+  // This is for product check box End
 
-  deleteSubmittedProduct(){
-    this.submittedProducts.splice(0,this.submittedProducts.length)
-  }
 }

@@ -7,10 +7,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
+import { AlertDialogComponent } from './utils/alert-dialog/alert-dialog.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AlertDialogComponent
   ],
   imports: [
     BrowserModule,

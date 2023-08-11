@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderServiceService } from '../services/order-service.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialogComponent } from '../utils/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-order',
@@ -19,7 +21,8 @@ export class OrderComponent implements OnInit{
     this.getAllOrders();
   }
 
-  constructor(private _router:Router,private _services:OrderServiceService){}
+  constructor(private _router:Router,private _services:OrderServiceService,
+              private _dialog:MatDialog){}
 
   getAllOrders(){
     this._services.findAllOrders(this.searchTerm,this.currentPage,this.pageSize).subscribe(
@@ -55,6 +58,13 @@ export class OrderComponent implements OnInit{
       this._services.deleteOrder(id).subscribe(
         result => {
           this._router.navigate(['order'])
+          const dialogConfig = new MatDialogConfig();
+              dialogConfig.data = {
+                title: 'Deleting Order',
+                message: 'Order Deleted Successfully',
+              };
+              dialogConfig.width = '400px';
+              this._dialog.open(AlertDialogComponent,dialogConfig)
           this.getAllOrders();
         }
       )

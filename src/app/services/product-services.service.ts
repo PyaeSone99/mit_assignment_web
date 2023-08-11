@@ -36,4 +36,8 @@ export class ProductServicesService {
   deleteProduct(id:number):Observable<number>{
     return this._http.delete<number>(`${Product_Domain}/delete/${id}`)
   }
+
+  findByProductName(name:any):Observable<any>{
+    return this._http.get<any>(`${Product_Domain}/withProductName/${name}`);
+  }
 }

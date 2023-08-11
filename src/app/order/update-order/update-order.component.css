@@ -1,0 +1,8 @@
+#quantity{
+    width: 80px;
+}
+
+#quantity:focus{
+    outline: none;
+    box-shadow: none;
+}
