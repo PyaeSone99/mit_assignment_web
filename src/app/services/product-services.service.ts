@@ -14,15 +14,19 @@ export class ProductServicesService {
   constructor(private _http:HttpClient) { }
 
   createProduct(formData : FormData):Observable<String>{
-    return this._http.post<String>(`${Product_Domain}/saveProduct`,formData);
+    return this._http.post<String>(`${Product_Domain}/create`,formData);
   }
 
   findAllProduct(searchkey:any,currentPage:number,pageSize:number):Observable<any>{
     const params = new HttpParams()
-    .set('searchKey',searchkey)
-    .set('current',currentPage)
-    .set('size',pageSize)
-    return this._http.get<any>(Product_Domain,{params});
+    .set('search',searchkey)
+    .set('page',currentPage)
+    .set('limit',pageSize)
+    return this._http.get<any>(`${Product_Domain}/findWithPager`,{params});
+  }
+
+  findAllProduct2():Observable<any>{
+    return this._http.get<any>(`${Product_Domain}/findAll`);
   }
 
   findById(id:number):Observable<number>{
@@ -30,11 +34,11 @@ export class ProductServicesService {
   }
 
   updateProduct(formData : FormData,id :number):Observable<any>{
-    return this._http.patch<any>(`${Product_Domain}/updateProduct/${id}`,formData)
+    return this._http.put<any>(`${Product_Domain}/update/${id}`,formData)
   }
 
   deleteProduct(id:number):Observable<number>{
-    return this._http.delete<number>(`${Product_Domain}/delete/${id}`)
+    return this._http.delete<number>(`${Product_Domain}/deleteProduct/${id}`)
   }
 
   findByProductName(name:any):Observable<any>{

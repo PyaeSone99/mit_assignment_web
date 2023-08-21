@@ -6,6 +6,7 @@ import { AddOrderComponent } from './add-order/add-order.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { UpdateOrderComponent } from './update-order/update-order.component';
+import {NgSelectModule} from '@ng-select/ng-select'
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { UpdateOrderComponent } from './update-order/update-order.component';
     CommonModule,
     OrderRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ]
 })
 export class OrderModule { }

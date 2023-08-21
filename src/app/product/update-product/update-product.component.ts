@@ -59,7 +59,10 @@ export class UpdateProductComponent implements OnInit{
         formData.append('code',this.productForm.get('code')?.value)
         formData.append('name',this.productForm.get('name')?.value)
         formData.append('price',this.productForm.get('price')?.value)
-        formData.append('image',this.productForm.get('image')?.value)
+       
+        if(this.productForm.get('image')?.value != null){
+          formData.append('image',this.productForm.get('image')?.value)
+        }
         formData.append('quantity',this.productForm.get('quantity')?.value)
         formData.append('description',this.productForm.get('description')?.value)
         this._service.updateProduct(formData,this.id).subscribe(result => {
@@ -72,7 +75,6 @@ export class UpdateProductComponent implements OnInit{
           dialogConfig.width = '400px';
           this._dialog.open(AlertDialogComponent,dialogConfig)
         })
-        
       }
     }
   }

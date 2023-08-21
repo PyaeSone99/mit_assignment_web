@@ -45,16 +45,18 @@ export class AddOrderComponent implements OnInit{
   }
 
   addOrderItems(){
-     for(let product of this.submittedProducts){
+     for(let product of this._itemArray){
       const orderItem = this._formBuilder.group({
         productId : product.id,
-        quantity : [1,Validators.maxLength(product.quantity)]
+        quantity :  product.ordQ
       });
       this.orderItems.push(orderItem);
      }
   }
 
   onSubmit(){
+    this.addOrderItems();
+    
     if(confirm("Are You sure to Order Products")){
       if(this.orderForm.valid){
         this._services.createOrder(this.orderForm.value).subscribe(
@@ -77,9 +79,9 @@ export class AddOrderComponent implements OnInit{
   }
 
   getAllProduct(){
-    this._productServices.findAllProduct('',this.currentPage,this.size).subscribe(
+    this._productServices.findAllProduct2().subscribe(
       productsData=>{
-        this.products = productsData.content[0]
+        this.products = productsData
         this.totalPages = new Array(productsData['totalPages']);
         for(let product of this.products){
             product.selected = false;
@@ -89,84 +91,51 @@ export class AddOrderComponent implements OnInit{
     )
   }
 
-  // Delete selected from list
-  deleteSelected(product:any){
-    this._selectedProductService.deleteCheckedProduct(product)
-    this.submittedProducts = this._selectedProductService.checkedProducts;
-    this.orderItems.clear();
-    this.addOrderItems()
-    
-  }
-
-  // For adding checked products
-
-  // This is for product list start
-  check(product:any,ev:any){
-    this._selectedProductService.addCheckedProduct(product,ev.target.checked);
-    
-  }
-
-  checkState(product:any){
-    return this._selectedProductService.isChecked(product);
-  }
-
-  modelBoxCancel(){
-    this._selectedProductService.clearSelectedProducts();
-  }
-
-  // This is for product list end
-// After submit products start
-  submitSelectedProduct(){
-    this.submittedProducts = this._selectedProductService.checkedProducts;
-    this.orderItems.clear();
-    this.addOrderItems()
-  }
-
-  // After submit products end
 
   // going back to order list page
   protected goBack(){
     this._router.navigateByUrl("order")
   }
 
-  // Pagination Start
-  goPrevious(){
-    this.currentPage --;
-    this.getAllProduct();
-  }
+// order item add
 
-  goNext(){
-    this.currentPage ++;
-    this.getAllProduct();
-  }
-
-
-
-  isLastPage(): boolean {
-    return this.currentPage === (this.totalElement/this.size);
-  }
-// Pagination End
-
-// Price Calculation Start
-calculateTotalPrice(product: any, quantity: number): number {
-  return product.price * quantity;
+data:{} = {
+  id : '',
+  code : '',
+  name : '',
+  price : '',
+  quantity : '',
+  ordQ : ''
 }
 
-calculateProductTotal(product: any, index: number) {
-  const quantityControl = this.orderItems.at(index)?.get('quantity');
-  const quantity = quantityControl?.value || 0; 
-  return this.calculateTotalPrice(product, quantity);
-}
+_itemArray:any = []
 
-calculateOverallTotal(): number {
-  let overallTotal = 0;
-  for (let i = 0; i < this.submittedProducts.length; i++) {
-    const product = this.submittedProducts[i];
-    const quantityControl = this.orderItems.at(i)?.get('quantity');
-    const quantity = quantityControl?.value || 0;
-    overallTotal += this.calculateTotalPrice(product, quantity);
+  ngSelectOrder(){
+    this.data = {
+      id : '',
+      code : '',
+      name : '',
+      price : '',
+      quantity : '',
+      ordQ : ''
+    }
+    this._itemArray.push(this.data)
   }
-  return overallTotal;
-}
-// Price Calculation End
+  qq:any
+  productSelected(e:any,i:any){
+    this._itemArray[i].id = e.id;
+    this._itemArray[i].code = e.code;
+    this._itemArray[i].name = e.name;
+    this._itemArray[i].price = e.price;
+    this._itemArray[i].quantity = e.quantity;
+  }
+
+  goRemove(i:number){
+    this._itemArray.splice(i,1)
+  }
+  // Calculate total
+  totalPrice : number = 0;
+  test(p:number,q:number){
+    this.totalPrice += (p*q)
+  }
 }

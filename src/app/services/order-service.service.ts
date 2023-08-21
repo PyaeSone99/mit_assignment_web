@@ -17,18 +17,21 @@ export class OrderServiceService {
 
   findAllOrders(searchKey:any,currentPage:any,pageSize:any):Observable<any>{
     const params = new HttpParams()
-    .set('searchKey',searchKey)
-    .set('current',currentPage)
-    .set('size',pageSize)
-    return this._http.get<any>(Product_Domain,{params})
+    .set('search',searchKey)
+    .set('page',currentPage)
+    .set('limit',pageSize)
+    return this._http.get<any>(`${Product_Domain}/findAll`,{params})
   }
+  // findAllOrders():Observable<any>{
+  //   return this._http.get<any>(`${Product_Domain}/findAll`);
+  // }
 
   findByOrderId(id:number):Observable<number>{
     return this._http.get<number>(`${Product_Domain}/details/${id}`);
   }
 
   updataOrder(data:any,id:number):Observable<any>{
-    return this._http.put<any>(`${Product_Domain}/updateOrder/${id}`,data);
+    return this._http.put<any>(`${Product_Domain}/update/${id}`,data);
   }
 
   deleteOrder(id:number):Observable<number>{

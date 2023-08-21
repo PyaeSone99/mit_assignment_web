@@ -18,7 +18,7 @@ export class ProductComponent implements OnInit{
   pageSize = 3;
   totalPages:Array<number> = [];
   totalElement:number = 0;
-  imageUrl:any = "http://localhost:8080/product/"
+  imageUrl:any = "http://localhost:8080/Product/assignment/product/image/"
   searchTerm: any='';
   
 
@@ -32,9 +32,10 @@ export class ProductComponent implements OnInit{
   getAllProduct(){
     this._services.findAllProduct(this.searchTerm,this.currentPage,this.pageSize).subscribe(
       productsData => {
-        this.products = productsData.content[0];
+        this.products = productsData.items;
         this.totalPages = new Array(productsData['totalPages']);
-        this.totalElement = productsData['totalElements'];
+        this.totalElement = productsData['totalCount'];
+
       }
     )
   }

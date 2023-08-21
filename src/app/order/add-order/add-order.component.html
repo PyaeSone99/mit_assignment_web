@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <div class="row">
-    <div class="col-md-8 offset-1">
+    <div class="col-md-10 offset-1">
       <h5>Add Order</h5>
       <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
@@ -48,104 +48,50 @@
               required</span>
           </div>
         </div>
-        <button type="button" class="btn btn-sm btn-outline-danger mb-2" data-bs-toggle="modal"
-          data-bs-target="#addProduct"><i class="fa-solid fa-plus me-1"></i>Add Product</button>
-        <table class="table shadow-sm table-hover">
-          <thead class="table-info">
-            <tr>
-              <th>Code</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Order Quantity</th>
-              <th>Total Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody *ngFor="let product of submittedProducts;let i = index">
-            <tr>
-              <td> {{product.code}} </td>
-              <td> {{product.name}} </td>
-              <td> {{product.price}} </td>
-              <td> {{product.quantity}} </td>
-              <td formArrayName="orderItems">
-                <div [formGroupName]="i">
-                  <input [max]="product.quantity" (input)="calculateProductTotal(product, i)" class="form-control"
-                    id="quantity" type="number" formControlName="quantity">
-                </div>
-              </td>
-              <td> {{ calculateTotalPrice(product, orderItems.at(i).get('quantity')?.value) }} </td>
-              <td><button type="button" class="btn btn-sm btn-outline-danger"
-                  (click)="deleteSelected(product)">Delete</button></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="5"></td>
-              <td> Overall Total: </td>
-              <td> {{ calculateOverallTotal() }} </td>
-            </tr>
-          </tfoot>
-        </table>
+       
       </form>
-      <!-- Model Box Start -->
-
-
-      <div class="modal" id="addProduct">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Check Product</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead class="">
-                  <tr>
-                    <th></th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Image</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let product of products">
-                    <td><input type="checkbox" [checked]="checkState(product.code)" (click)="check(product,$event)" />
-                    </td>
-                    <td> {{product.code}} </td>
-                    <td> {{product.name}} </td>
-                    <td> {{product.price}} </td>
-                    <td> <img [src]="'http://localhost:8080/product/'+product?.imageName" alt="{{product.name}}"
-                        height="30" width="35"> </td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- Pagination Start -->
-              <ul class="pagination justify-content-end">
-                <li class="page-item" [ngClass]="{ 'disabled': currentPage === 0 }">
-                  <a class="page-link me-2" (click)="goPrevious()">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item" [ngClass]="{ 'disabled': currentPage === totalPages.length-1 }">
-                  <a class="page-link" (click)="goNext()">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-              <!-- Pagination End -->
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" (click)="submitSelectedProduct()"
-                data-bs-dismiss="modal">Submit</button>
-              <button type="button" (click)="modelBoxCancel()" data-bs-dismiss="modal"
-                class="btn btn-danger">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Model Box End -->
+      <table class="table shadow-sm table-hover">
+        <thead class="table-info">
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Order Quantity</th>
+            <!-- <th>Total Price</th> -->
+            <th>
+              <button type="button" class="btn btn-sm btn-outline-primary" (click)="ngSelectOrder()">AddOrderItems</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let product of _itemArray;let i = index">
+          <tr>
+            <td> {{product.code}} </td>
+            <td> 
+                <div class="product-select-container">
+                  <ng-select [items]="products" bindLabel="name" bindValue="id" (change)="productSelected($event,i)" [clearable]="false"> </ng-select>  
+                </div>              
+            </td>
+            <td> {{product.price}} </td>
+            <td> {{product.quantity}} </td>
+            <td>
+              <div class="quantity-input-container">
+                <input class="form-control" id="quantity" type="number" [(ngModel)]="product.ordQ" (input)="test(product.price,product.ordQ)">
+              </div>
+            </td>
+            <!-- <td> {{gg}} </td> -->
+            <td><button type="button" class="btn btn-sm btn-outline-danger"
+                (click)="goRemove(i)">Delete</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5"></td>
+            <td> Overall Total: </td>
+            <td> {{ totalPrice }} </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   </div>
 </div>
