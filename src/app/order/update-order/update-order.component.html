@@ -4,10 +4,12 @@
       <h5>Update Order</h5>
       <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
-          <button [disabled]="orderForm.invalid" class="btn btn-outline-primary me-2" type="submit"><i
-              class="fa-regular fa-floppy-disk"></i></button>
-          <button class="btn btn-outline-danger" type="button" (click)="goBack()"><i
-              class="fa-solid fa-xmark"></i></button>
+          <button [disabled]="orderForm.invalid" class="btn btn-primary me-2 btn-sm" type="submit"><i
+              class="fa-regular fa-floppy-disk me-1"></i>Update</button>
+          <button class="btn btn-warning btn-sm me-2" type="button" (click)="goBack()"><i
+              class="fa-solid fa-xmark text-white me-1"></i>Back</button>
+          <button class="btn btn-danger btn-sm" type="button" (click)="goDelete(order.id)"><i
+            class="fa-regular fa-trash-can me-1"></i>Delete</button>
         </div>
         <div class="mb-2 d-flex">
           <div class="me-3">
@@ -61,8 +63,8 @@
             <th>Order Quantity</th>
             <!-- <th>Total Price</th> -->
             <th>
-              <button type="button" class="btn btn-sm btn-outline-primary"
-                (click)="ngSelectOrder()">AddOrderItems</button>
+              <button type="button" class="btn btn-sm btn-primary text-white"
+                (click)="ngSelectOrder()"><i class="fa-solid fa-plus me-1"></i>Add</button>
             </th>
           </tr>
         </thead>
@@ -82,7 +84,8 @@
               </div>
             </td>
             <!-- <td> {{gg}} </td> -->
-            <td><button type="button" class="btn btn-sm btn-outline-danger" (click)="goRemove(i)">Delete</button></td>
+            <td><button type="button" class="btn btn-sm text-white btn-danger" (click)="goRemove(i)">
+              <i class="fa-regular fa-trash-can me-1"></i>Delete</button></td>
           </tr>
         </tbody>
         <!-- <tfoot>

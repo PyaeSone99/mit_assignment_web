@@ -1,13 +1,13 @@
 <div class="container mt-5">
   <div class="row">
-    <div class="col-md-10 offset-1">
+    <div class="col-md-8 offset-1">
       <h5>Add Order</h5>
       <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
-          <button [disabled]="orderForm.invalid" class="btn btn-outline-primary me-2" type="submit"><i
-              class="fa-regular fa-floppy-disk"></i></button>
-          <button class="btn btn-outline-danger" type="button" (click)="goBack()"><i
-              class="fa-solid fa-xmark"></i></button>
+          <button [disabled]="orderForm.invalid" class="btn btn-primary btn-sm me-2" type="submit"><i
+              class="fa-regular fa-floppy-disk me-1"></i>Add</button>
+          <button class="btn btn-warning btn-sm" type="button" (click)="goBack()"><i
+              class="fa-solid fa-xmark me-1 text-white"></i>Back</button>
         </div>
         <div class="mb-2 d-flex">
           <div class="me-3">
@@ -60,7 +60,7 @@
             <th>Order Quantity</th>
             <!-- <th>Total Price</th> -->
             <th>
-              <button type="button" class="btn btn-sm btn-outline-primary" (click)="ngSelectOrder()">AddOrderItems</button>
+              <button type="button" class="btn btn-sm btn-primary" (click)="ngSelectOrder()"><i class="fa-solid fa-plus me-1"></i>Add</button>
             </th>
           </tr>
         </thead>
@@ -80,13 +80,13 @@
               </div>
             </td>
             <!-- <td> {{gg}} </td> -->
-            <td><button type="button" class="btn btn-sm btn-outline-danger"
-                (click)="goRemove(i)">Delete</button></td>
+            <td><button type="button" class="btn btn-sm btn-danger"
+                (click)="goRemove(i)"><i class="fa-regular fa-trash-can me-1"></i>Delete</button></td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="5"></td>
+            <td colspan="3"></td>
             <td> Overall Total: </td>
             <td> {{ totalPrice }} </td>
           </tr>

@@ -112,9 +112,9 @@ export class OrderComponent implements OnInit{
     };
 
     selectedFile: File | undefined;
-    onFileSelected(event: any) {
-      this.selectedFile = event.target.files[0];
-    }
+    // onFileSelected(event: any) {
+    //   this.selectedFile = event.target.files[0];
+    // }
   
     uploadFile() {
       this._router.navigate(['order'])
@@ -138,6 +138,26 @@ export class OrderComponent implements OnInit{
       }
       
     }
+
+    // Excel import button
+    // selectedFile: File | undefined; 
+ 
+  onFileSelected(event: any) { 
+    const file: File = event.target.files[0]; 
+    if (file) { 
+      this.selectedFile = file; 
+    } 
+  } 
+ 
+  exportFile() { 
+    if (this.selectedFile) {
+      console.log("success");
+      
+    }
+  } 
+  cancelSelection() { 
+    this.selectedFile = undefined; 
+  }
 }
 
 

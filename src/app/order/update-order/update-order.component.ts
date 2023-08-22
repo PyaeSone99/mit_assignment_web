@@ -183,4 +183,23 @@ export class UpdateOrderComponent implements OnInit {
   test(p: number, q: number) {
     this.totalPrice += p * q;
   }
+
+  // Delete order items 
+  goDelete(id:number){
+    if(confirm("Are you sure you want to delete this Order")){
+      this._services.deleteOrder(id).subscribe(
+        result => {
+          this._router.navigate(['order'])
+          const dialogConfig = new MatDialogConfig();
+              dialogConfig.data = {
+                title: 'Deleting Order',
+                message: 'Order Deleted Successfully',
+              };
+              dialogConfig.width = '400px';
+              this._dialog.open(AlertDialogComponent,dialogConfig)
+              this.goBack();
+        }
+      )
+    }
+  }
 }
